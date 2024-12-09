@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+<h:body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<link href='css/style.css' rel='stylesheet' type="text/css" />
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script
+		src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+	<link rel="stylesheet"
+		href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css"></link>
+	<link rel="stylesheet"
+		href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css"></link>
+
+	<script src="js/main.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script
+		src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+		
+
+
+	<h:form prependId="false" enctype="multipart/form-data">
+		<ul>
+			<li><strong>Welcome - <h:outputText
+						value="#{sessionScope.name}" /></strong></li>
+			<li style="float: right"><p:commandButton value="Logout" action="#{userLoginBean.logout}" /></li>
+		</ul>
+
+		<br />
+		<br />
+<div style="height: 150px; width: 675px; float: left;">
+		<p:fileUpload value="#{dataLoadBean.file}" mode="simple" id="upload"
+			skinSimple="true" allowTypes="/(\.|\/)(csv|xls|xlst)$/" />
+		<p:commandButton value="Upload" ajax="false"
+			action="#{dataLoadBean.upload}" update="upload messages"
+			styleClass="p-mt-3 ui-button-outlined p-d-block" />
+		<p:growl id="messages" showDetail="true" />
+		<br />
+
+	
+		<h:selectOneMenu id="datasetId"
+			value="#{dataLoadBean.selectedDataFile}">
+			<p:ajax event="change" listener="#{dataLoadBean.loadFileData}" />
+			<f:selectItem itemLabel="Select File" />
+			<f:selectItems value="#{dataLoadBean.dataFileList}" />
+		</h:selectOneMenu>
+ <div style="margin-left: 200px;">
+		<p:outputLabel>File Name :</p:outputLabel>
+		<p:inputText id="save" value="#{dataLoadBean.fileName}" />
+		<p:commandButton update="save" onclick="onSaveData()" value="Save" ajax="true"
+			styleClass="p-mt-3 ui-button-outlined p-d-block" action="#{dataLoadBean.saveGridData}"/>
+</div>
+</div>
+		<div style="margin-left: 620px;" class="container">
+			<div class="row">
+
+				<div class="col">
+					<div class="row">
+						<div class="col">
+							<h:selectOneMenu id="xAxis" value="#{dataLoadBean.xSelectedAxis}">
+								<p:ajax event="change" 
+									listener="#{dataLoadBean.graphDataUpdate}" />
+								<f:selectItem itemLabel="X-Axis" />
+								<f:selectItems value="#{dataLoadBean.xAxis}" />
+							</h:selectOneMenu>
+						</div>
+						<div class="col">
+							<h:selectOneMenu id="yAxis" value="#{dataLoadBean.ySelectedAxis}">
+								<p:ajax event="change"
+									listener="#{dataLoadBean.graphDataUpdate}" />
+								<f:selectItem itemLabel="Y-Axis" />
+								<f:selectItems value="#{dataLoadBean.yAxis}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+		
+		
+	<div style="width: 100%; overflow: hidden;">
+		<div style="width: 600px; float: left;">
+				<div id="myGrid" class="col ag-theme-alpine"	style="height: 300px; width: 500px;"></div>
+				</div>
+
+		<div style="margin-left: 620px;">
+			<div id="dataGridContaineer" style="height: 300px; width: 700px;"></div>
+		</div>
+	</div>
+		<p:remoteCommand name="saveGridData" action="#{dataLoadBean.saveGridData}"/>
+
+
+
+	</h:form>
+</h:body>
+
+</html>

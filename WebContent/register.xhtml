@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<body>
+<script type="text/javascript">
+function fun1() {
+	rc1();
+}
+</script>
+	<center>
+		<div style="width: 300px; height: 400px">
+		<h:form>
+			<p:panel header="Register Here" >
+			<p:remoteCommand name="rc1" action="#{userLoginBean.add}"/>
+				<h:panelGrid columns="1" cellpadding="5">
+				
+				<p:outputLabel value="Name" for="name" />
+					<p:inputText  id="name" value="#{userLoginBean.user.name}" required="true" />
+
+					<p:outputLabel value="Email" for="email" />
+					<p:inputText  id="email" value="#{userLoginBean.user.email}" required="true" />
+
+					<p:outputLabel value="Password" for="password" />
+					<p:password id="password" value="#{userLoginBean.user.password}"  required="true"/>
+					
+					<p:commandButton value="Register" process="@form" onclick="fun1()"  
+				update="msgs1"/>
+			<p:messages id="msgs1" />
+					 <p:link outcome="index.xhtml" value="Login"/>
+
+				</h:panelGrid>
+			</p:panel>
+			</h:form>
+		</div>
+	</center>
+
+
+</body>
+</html>

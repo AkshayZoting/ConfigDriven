@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="test_web">
+	<property environment="env" />
+	<property name="JBOSS_HOME" value="C://home//oasprod//wildfly-13.0.0.Final" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<property name="sourcebase" value="." />
+	<property name="build.base" value="/tmp/${user.name}" />
+	<property name="dist" value="${JBOSS_HOME}//standalone//deployments" />
+	<property name="test_webwar" value="test_web.war" />
+
+	<path id="test_web.classpath">
+		
+		<pathelement location="WebContent/WEB-INF/lib/commons-lang3-3.12.0.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/jstl-1.2.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/json-20180813.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/gson-2.8.9.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/commons-io-2.4.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/servlet-api.jar" />
+		<!-- Primefaces JARs -->
+		<pathelement location="WebContent/WEB-INF/lib/primefaces-10.0.0.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/libphonenumber-5.3.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/primefaces-extensions-8.0.4.jar" />
+		<!-- END Primefaces JARs -->
+		
+		<pathelement location="WebContent/WEB-INF/lib/commons-collections4-4.4.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/commons-text-1.9.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/commons-beanutils-1.9.4.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/opencsv-5.5.2.jar" />
+		
+		
+		<!-- Wildfly JARs -->
+		<pathelement location="${JBOSS_HOME}/modules/system/layers/base/javax/faces/api/main/jsf-api-2.2.1.jar" />
+		<pathelement location="${JBOSS_HOME}/modules/system/layers/base/org/apache/log4j/main/log4j-1.2.17.jar" />
+		<pathelement location="${JBOSS_HOME}/modules/system/layers/base/org/jboss/logging/main/jboss-logging-3.3.1.Final.jar" />
+		<pathelement location="${JBOSS_HOME}/modules/system/layers/base/javax/persistence/api/main/javax.persistence-api-2.2.jar" />
+		<!-- END Wildfly JARs -->
+	</path>
+	<target name="init">
+		<mkdir dir="WebContent/WEB-INF/classes" />
+		<copy includeemptydirs="false" todir="WebContent/WEB-INF/classes">
+			<fileset dir="src" excludes="**/*.launch, **/*.java" />
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="WebContent/WEB-INF/classes" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="WebContent/WEB-INF/classes" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="test_web.classpath" />
+		</javac>
+		<war destfile="${dist}/test_web.war" webxml="${sourcebase}/WebContent/WEB-INF/web.xml" >
+			<lib dir="${sourcebase}/WebContent/WEB-INF/lib" />
+			<classes dir="${sourcebase}/WebContent/WEB-INF/classes" />
+			<fileset dir="${sourcebase}" includes="/WebContent/**/*.xhtml" />
+			<fileset dir="${sourcebase}" >
+				<filename name="WebContent/js/*.js" />
+			</fileset>
+			<fileset dir="${sourcebase}" >
+				<filename name="WebContent/css/*.css" />
+			</fileset>
+			<fileset dir="${sourcebase}" >
+				<filename name="WebContent/*.xml" />
+			</fileset>
+
+		</war>
+		<!-- <copy file="${dist}/${rsedge_webwar}" tofile="${JBOSS_HOME}/standalone/deployments/${rsedge_webwar}" />  -->
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+</project>
